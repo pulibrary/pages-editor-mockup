@@ -1,3 +1,32 @@
-#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-#sortable li span { position: absolute; margin-left: -1.3em; }
+#sortable {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 60%;
+}
+.image-box {
+  padding-top: 5px;
+  height: 180px;
+  width: 180px;
+  float: left;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+}
+.image-box:hover {
+  border: 1px solid red;
+}
+.image-box a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+.caption {
+  font-weight: bold;
+  padding: 5px;
+  margin-bottom: -5px;
+  /*max-width: 200px;*/
+}
