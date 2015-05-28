@@ -1,17 +1,12 @@
+var AUTO_SUBMIT_PAGE_CHANGES = false;
 
-var THUMBNAIL_SIZE = 150
-var IMAGE_SERVER = "http://libimages1.princeton.edu/loris/"
-var THUMBNAIL_PARAMS = "/full/!150,150/0/default.png"
-
-
-
+var IMAGE_SERVER = "http://libimages1.princeton.edu/loris/";
+var THUMBNAIL_PARAMS = "/full/!150,150/0/default.png";
 
 $(function() {
   $( "#sortable" ).sortable();
   $( "#sortable" ).disableSelection();
 });
-
-
 
 function liForThumbnail(index, data) {
   liAttrs = { class: "image-box container", "data-objid": data.objectId }
@@ -19,7 +14,7 @@ function liForThumbnail(index, data) {
   $li.append(thumbnailRow(data));
   $li.append(pageEditForm(data));
   return $li
-}
+};
 
 function thumbnailRow(data) {
   var $imgRowDiv = $('<div/>', { class: "row thumb-div" });
@@ -27,7 +22,7 @@ function thumbnailRow(data) {
   var $img = $('<img/>', { class: "thumb", src: imgSrc, alt: data.label });
   $imgRowDiv.append($img);
   return $imgRowDiv
-}
+};
 
 function pageEditForm(data) {
   $pageFormTag = pageFormTag(data.objectId);
@@ -35,18 +30,18 @@ function pageEditForm(data) {
   $pageFormTag.append(labelTextBox("page[label]", data.label, labelInputId) );
   $pageFormTag.append(pageOptionCheckBoxes(data.objectId));
   return $pageFormTag
-}
+};
 
 function pageFormTag(objectId) {
   var formAttrs = {
-    "class" : "form-horizonal",
+    "class" : "form-horizonal page-form",
     "id" : objectId+"-metadata",
     "action" : "/pages/"+objectId,
     "accept-charset" : "UTF-8",
     "method" : "post"
   };
   return $('<form/>', formAttrs);
-}
+};
 
 function labelTextBox(name, value, id) {
   return $('<div class="form-group">'+
@@ -54,7 +49,7 @@ function labelTextBox(name, value, id) {
       '<input type="text" class="form-control" value="'+value+'" name="'+name+'" id="'+id+'"/>'+
     '</div>'+
   '</div>');
-}
+};
 
 function pageOptionCheckBoxes(objectId) {
   $fg = $('<div class="col-sm-12"/>');
@@ -65,7 +60,7 @@ function pageOptionCheckBoxes(objectId) {
   $fPCB = bsCheckbox("page[facing_pages]", "page_facing_pages-"+objectId, "Facing pages");
   $cbDiv.append($fPCB);
   return $fg
-}
+};
 
 function bsCheckbox(name, id, label) {
   return $('<label class="col-sm-6 page-option">'+
@@ -73,29 +68,28 @@ function bsCheckbox(name, id, label) {
   '</label>')
 };
 
-// function checkBox(name, id, label) {
-//   return $('<div class="form-group page-checkbox">'+
-//     '<div class="col-sm-12">'+
-//       '<div class="checkbox">'+
-//         '<label class="col-sm-6">'+
-//           '<input type="checkbox" name="'+name+'" id="'+id+'">'+label+
-//         '</label>'+
-//         '<label  class="col-sm-6">'+
-//           '<input type="checkbox" name="'+name+'" id="'+id+'">'+label+
-//         '</label>'+
-//       '</div>'+
-//     '</div>'+
-//   '</div>');
-// }
+function autoSubmitPageChanges() {
+  if (AUTO_SUBMIT_PAGE_CHANGES) {
+    pageInputs = 'input[name="page[non_paged]"], '
+    pageInputs += 'input[name="page[facing_pages]"], '
+    pageInputs += 'input[name="page[label]"]'
+    $(pageInputs).change(function() {
+      $(this).closest('form').submit();
+    });
+  };
+};
 
 function appendDataToSortable(imageData) {
   $.each(imageData, function( index, data ) {
     $( "#sortable" ).append( liForThumbnail(index, data) );
   });
-}
+};
 
 $(document).ready(function() {
-  $.getJSON("js/sampleData.json", function(data){
+  $.getJSON("sample_data/sampleData.json", function(data){
+
     appendDataToSortable(data)
+    autoSubmitPageChanges()
+
   });
 });
