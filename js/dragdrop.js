@@ -1,4 +1,4 @@
-var AUTO_SUBMIT_PAGE_CHANGES = false;
+var AUTO_SUBMIT_PAGE_CHANGES = true;
 
 var IMAGE_SERVER = "http://libimages1.princeton.edu/loris/";
 var THUMBNAIL_PARAMS = "/full/!150,150/0/default.png";
@@ -74,7 +74,13 @@ function autoSubmitPageChanges() {
     pageInputs += 'input[name="page[facing_pages]"], '
     pageInputs += 'input[name="page[label]"]'
     $(pageInputs).change(function() {
-      $(this).closest('form').submit();
+      // $(this).closest('form').submit(); - Not AJAX
+      // Not 100% sure this is working
+      var target = $(this).closest('form').attr('action');
+      var form_data = $(this).closest('form').serialize();
+      $.post(target, form_data);
+      // Should give some kind of indication of success or fail...
+      // See http://api.jquery.com/jquery.post/#example-3
     });
   };
 };
